@@ -5,7 +5,8 @@ import (
 	"fmt"
 	// "os"
 	"io/ioutil"
-	app "sandbox/app"
+
+	core "github.com/neetjn/go-cars/core"
 )
 
 func main() {
@@ -39,7 +40,7 @@ func main() {
 	// fmt.Println(string(b))
 
 	data, _ := ioutil.ReadFile("data/cars.json")
-	cars := app.CarCollectionDto{}
+	cars := core.CarCollectionDto{}
 	json.Unmarshal(data, &cars)
 	// fmt.Println(cars)
 	for _, e := range cars.Items {
