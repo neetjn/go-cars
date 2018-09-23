@@ -42,8 +42,15 @@ func main() {
 	data, _ := ioutil.ReadFile("data/cars.json")
 	cars := core.CarCollectionDto{}
 	json.Unmarshal(data, &cars)
-	// fmt.Println(cars)
-	for _, e := range cars.Items {
-		fmt.Println(e.Model)
+
+	data, _ = ioutil.ReadFile("data/trucks.json")
+	trucks := core.TruckCollectionDto{}
+	json.Unmarshal(data, &trucks)
+
+	vehicles := core.VehicleCollectionDto{
+		Cars:   cars,
+		Trucks: trucks,
 	}
+
+	fmt.Println(vehicles)
 }
