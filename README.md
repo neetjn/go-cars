@@ -13,7 +13,7 @@ This project was created to learn Golang basics, as well as common use cases fro
 * [ ] Dockerize application.
 * [ ] Create unit tests and execute on a CI/CD platform.
 
-## What I Learned
+## What I've Learned
 
 * All .go files in a directory must have the same package name.
   * All .go files in a directory are considered to be part of the "package".

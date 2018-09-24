@@ -3,8 +3,10 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	// "os"
 	"io/ioutil"
+	"net/http"
 
 	core "github.com/neetjn/go-cars/core"
 )
@@ -47,10 +49,14 @@ func main() {
 	trucks := core.TruckCollectionDto{}
 	json.Unmarshal(data, &trucks)
 
-	vehicles := core.VehicleCollectionDto{
+	vehicles, _ := json.Marshal(core.VehicleCollectionDto{
 		Cars:   cars,
 		Trucks: trucks,
-	}
+	})
 
-	fmt.Println(vehicles)
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprintf(w, string(vehicles))
+	})
+
+	log.Fatal(http.ListenAndServe(":8080", nil))
 }
