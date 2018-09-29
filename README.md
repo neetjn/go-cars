@@ -9,6 +9,7 @@ This project was created to learn Golang basics, as well as common use cases fro
 * [x] Create a basic DTO (data transfer object).
 * [x] Marshal and unmarshal DTO to string and Go structure.
 * [x] Expose REST endpoints for the experiment application.
+* [x] Create a service description for my REST endpoits, following the HATEOAS model.
 * [ ] Use a go routine.
 * [ ] Dockerize application.
 * [ ] Create unit tests and execute on a CI/CD platform.

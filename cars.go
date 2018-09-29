@@ -55,6 +55,19 @@ func main() {
 	})
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		// service description
+		fmt.Fprintf(w, string())
+	})
+
+	http.HandleFunc("/cars", func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprintf(w, string())
+	})
+
+	http.HandleFunc("/trucks", func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprintf(w, string())
+	})
+
+	http.HandleFunc("/vehicles", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, string(vehicles))
 	})
 
