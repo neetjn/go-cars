@@ -12,6 +12,7 @@ import (
 )
 
 func main() {
+
 	// go imports all files in the same directory!!!
 	// the main func is whats executed :)
 
@@ -52,24 +53,33 @@ func main() {
 	vehicles, _ := json.Marshal(core.VehicleCollectionDto{
 		Cars:   cars,
 		Trucks: trucks,
-	})
+  })
 
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		// service description
-		fmt.Fprintf(w, string())
-	})
+  // TODO: create http lib for shorthand http functionality
+  // that or inject controller into handler, that way we can manage everything from context?
 
-	http.HandleFunc("/cars", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(w, string())
-	})
+  core.AddResource("/", "root", "", func(w http.ResponseWriter, r *http.Request) {
+    sd := core.GetServiceDescription(r)
+    processed, _ := json.Marshal(sd)
 
-	http.HandleFunc("/trucks", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(w, string())
-	})
+    switch r.Method {
+    case "GET":
+      w.Header().Set("Content-Type", "application/json")
+      fmt.Fprintf(w, string(processed))
+    }
+  })
 
-	http.HandleFunc("/vehicles", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(w, string(vehicles))
-	})
+  core.AddResource("/vehicles/", "vehicles-collection", "", func(w http.ResponseWriter, r *http.Request) {
+    switch r.Method {
+    case "GET":
+      w.Header().Set("Content-Type", "application/json")
+      fmt.Fprintf(w, string(vehicles))
+    case "POST":
+      // TODO: left here, figure out how to read request body
+      w.Header().Set("Content-Type", "application/json")
+      fmt.Fprintf(w, "[]")
+    }
+  })
 
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }

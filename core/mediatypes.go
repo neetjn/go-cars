@@ -7,7 +7,7 @@ type LinkDto struct {
 
 type ServiceDescriptionDto struct {
 	Links           []LinkDto `json:"links"`
-	HealthEndpoints []LinkDto `json:"links"`
+	HealthEndpoints []LinkDto `json:"healthEndpoints"`
 }
 
 type CarDto struct {
