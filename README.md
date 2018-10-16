@@ -27,6 +27,7 @@ This project was created to learn Golang basics, as well as common use cases fro
 * Go was designed to be semantically hardy. Unlike javascript or Python, where a single operation can be expressed in numerous forms, the philosophy behind Go was to design a programming language where there's a single way to achieve certain operations, inadvertently making the language incredibly verbose and easy to read.
 * All go related projects must be properly placed in the `$GOPATH` to be compiled and ran properly. You **can** specify your project directory outside of the `$GOPATH`, but any packages installed with `go` or `dep` are placed directory in the current `$GOPATH` to be discovered.
 * Go structures can be marshaled and unmarshaled into and from JSON by design.
+* Because the standard library for Go provides so much out of the gate, the need for a framework or any misc. modules for a basic REST api is highly unnecessary.
 
 ## Closing Thoughts
 

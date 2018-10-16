@@ -50,11 +50,6 @@ func main() {
 	trucks := core.TruckCollectionDto{}
 	json.Unmarshal(data, &trucks)
 
-	vehicles, _ := json.Marshal(core.VehicleCollectionDto{
-		Cars:   cars,
-		Trucks: trucks,
-  })
-
   // TODO: create http lib for shorthand http functionality
   // that or inject controller into handler, that way we can manage everything from context?
 
@@ -69,11 +64,41 @@ func main() {
     }
   })
 
+  core.AddResource("/cars/", "cars-collection", "", func(w http.ResponseWriter, r *http.Request) {
+    switch r.Method {
+    case "GET":
+      resp, _ := json.Marshal(cars)
+      w.Header().Set("Content-Type", "application/json")
+      fmt.Fprintf(w, string(resp))
+    case "POST":
+      // TODO: left here, figure out how to read request body
+      w.Header().Set("Content-Type", "application/json")
+      fmt.Fprintf(w, "[]")
+    }
+  })
+
+  core.AddResource("/trucks/", "trucks-collection", "", func(w http.ResponseWriter, r *http.Request) {
+    switch r.Method {
+    case "GET":
+      resp, _ := json.Marshal(trucks)
+      w.Header().Set("Content-Type", "application/json")
+      fmt.Fprintf(w, string(resp))
+    case "POST":
+      // TODO: left here, figure out how to read request body
+      w.Header().Set("Content-Type", "application/json")
+      fmt.Fprintf(w, "[]")
+    }
+  })
+
   core.AddResource("/vehicles/", "vehicles-collection", "", func(w http.ResponseWriter, r *http.Request) {
     switch r.Method {
     case "GET":
+      resp, _ := json.Marshal(core.VehicleCollectionDto{
+        Cars:   cars,
+        Trucks: trucks,
+      })
       w.Header().Set("Content-Type", "application/json")
-      fmt.Fprintf(w, string(vehicles))
+      fmt.Fprintf(w, string(resp))
     case "POST":
       // TODO: left here, figure out how to read request body
       w.Header().Set("Content-Type", "application/json")
