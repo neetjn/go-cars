@@ -14,11 +14,11 @@ func main() {
 
 	data, _ := ioutil.ReadFile("data/cars.json")
 	cars := core.CarCollectionDto{}
-	json.Unmarshal(data, &cars)
+	json.Unmarshal(data, cars)
 
 	data, _ = ioutil.ReadFile("data/trucks.json")
 	trucks := core.TruckCollectionDto{}
-	json.Unmarshal(data, &trucks)
+	json.Unmarshal(data, trucks)
 
   // TODO: create http lib for shorthand http functionality
   // that or inject controller into handler, that way we can manage everything from context?
@@ -44,7 +44,8 @@ func main() {
       body, _ := ioutil.ReadAll(r.Body)
       defer r.Body.Close()
       car := core.CarDto{}
-      err := json.Unmarshal(body, &car)
+      err := json.Unmarshal(body, car)
+      fmt.Println(err.Error())
       if err != nil {
         cars.Items = append(cars.Items, car)
         w.WriteHeader(http.StatusCreated)
@@ -64,7 +65,7 @@ func main() {
       body, _ := ioutil.ReadAll(r.Body)
       defer r.Body.Close()
       truck := core.TruckDto{}
-      err := json.Unmarshal(body, &truck)
+      err := json.Unmarshal(body, truck)
       if err != nil {
         trucks.Items = append(trucks.Items, truck)
         w.WriteHeader(http.StatusCreated)
