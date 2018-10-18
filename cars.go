@@ -13,12 +13,12 @@ import (
 func main() {
 
 	data, _ := ioutil.ReadFile("data/cars.json")
-	cars := core.CarCollectionDto{}
-	json.Unmarshal(data, cars)
+	var cars *core.CarCollectionDto = &core.CarCollectionDto{}
+	json.Unmarshal(data, &cars)
 
 	data, _ = ioutil.ReadFile("data/trucks.json")
-	trucks := core.TruckCollectionDto{}
-	json.Unmarshal(data, trucks)
+	var trucks *core.TruckCollectionDto = &core.TruckCollectionDto{}
+	json.Unmarshal(data, &trucks)
 
   // TODO: create http lib for shorthand http functionality
   // that or inject controller into handler, that way we can manage everything from context?
@@ -43,11 +43,10 @@ func main() {
     case http.MethodPost:
       body, _ := ioutil.ReadAll(r.Body)
       defer r.Body.Close()
-      car := core.CarDto{}
-      err := json.Unmarshal(body, car)
-      fmt.Println(err.Error())
+      var car *core.CarDto = &core.CarDto{}
+      err := json.Unmarshal(body, *car)
       if err != nil {
-        cars.Items = append(cars.Items, car)
+        cars.Items = append(cars.Items, *car)
         w.WriteHeader(http.StatusCreated)
       } else {
         http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -64,10 +63,10 @@ func main() {
     case http.MethodPost:
       body, _ := ioutil.ReadAll(r.Body)
       defer r.Body.Close()
-      truck := core.TruckDto{}
-      err := json.Unmarshal(body, truck)
+      var truck *core.TruckDto = &core.TruckDto{}
+      err := json.Unmarshal(body, *truck)
       if err != nil {
-        trucks.Items = append(trucks.Items, truck)
+        trucks.Items = append(trucks.Items, *truck)
         w.WriteHeader(http.StatusCreated)
       } else {
         http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -79,8 +78,8 @@ func main() {
     switch r.Method {
     case http.MethodGet:
       resp, _ := json.Marshal(core.VehicleCollectionDto{
-        Cars:   cars,
-        Trucks: trucks,
+        Cars:   *cars,
+        Trucks: *trucks,
       })
       w.Header().Set("Content-Type", "application/json")
       fmt.Fprintf(w, string(resp))
