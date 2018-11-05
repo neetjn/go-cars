@@ -14,9 +14,6 @@ type Resource struct {
 
 var ResourceCollection = make([]Resource, 0)
 
-// TODO: figure out how to decorate with serialization
-// clean up handler logic, figure out service description
-
 func AddResource(route string, rel string, desc string, handler HandlerFn) {
   ResourceCollection = append(ResourceCollection, Resource{
     Route: route,

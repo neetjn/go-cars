@@ -4,13 +4,19 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
-	"io/ioutil"
+  "io/ioutil"
 	"net/http"
+  "strconv"
 
 	core "github.com/neetjn/go-cars/core"
+  utils "github.com/neetjn/go-cars/utils"
+  zap "go.uber.org/zap"
 )
 
 func main() {
+
+  var MIN_VIN_LENGTH int = utils.ParseInt(utils.GetEnv("MIN_VIN_LENGTH", "15"))
+  var MAX_VIN_LENGTH int = utils.ParseInt(utils.GetEnv("MAX_VIN_LENGTH", "17"))
 
 	data, _ := ioutil.ReadFile("data/cars.json")
 	var cars *core.CarCollectionDto = &core.CarCollectionDto{}
@@ -19,9 +25,6 @@ func main() {
 	data, _ = ioutil.ReadFile("data/trucks.json")
 	var trucks *core.TruckCollectionDto = &core.TruckCollectionDto{}
 	json.Unmarshal(data, &trucks)
-
-  // TODO: create http lib for shorthand http functionality
-  // that or inject controller into handler, that way we can manage everything from context?
 
   core.AddResource("/", "root", "", func(w http.ResponseWriter, r *http.Request) {
     sd := core.GetServiceDescription(r)
@@ -34,7 +37,18 @@ func main() {
     }
   })
 
+  core.AddResource("/car/", "car", "", func(w http.ResponseWriter, r *http.Request) {
+    // TODO: implement processor for url parameters
+    // in the meantime using query args is sufficient to exercise given functionality
+    vin := r.URL.Query().Get("vin")
+    if len(vin) != 5
+    switch r.Method {
+
+    }
+  })
+
   core.AddResource("/cars/", "cars-collection", "", func(w http.ResponseWriter, r *http.Request) {
+    // TODO: add check for existing car by unique vin on post
     switch r.Method {
     case http.MethodGet:
       resp, _ := json.Marshal(cars)
@@ -55,6 +69,7 @@ func main() {
   })
 
   core.AddResource("/trucks/", "trucks-collection", "", func(w http.ResponseWriter, r *http.Request) {
+    // TODO: add check for existing truck by unique vin on post
     switch r.Method {
     case http.MethodGet:
       resp, _ := json.Marshal(trucks)
@@ -83,11 +98,6 @@ func main() {
       })
       w.Header().Set("Content-Type", "application/json")
       fmt.Fprintf(w, string(resp))
-    case http.MethodPost:
-      // TODO: left here, figure out how to read request body
-      w.Header().Set("Content-Type", "application/json")
-      fmt.Fprintf(w, "[]")
-    }
   })
 
 	log.Fatal(http.ListenAndServe(":8080", nil))

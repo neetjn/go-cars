@@ -13,3 +13,6 @@
 
 # Vim drop files
 *.swp
+
+# Vendor dependencies
+vendor/
