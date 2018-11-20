@@ -13,7 +13,7 @@ func GetEnv(key string, fallback string) string {
   return fallback
 }
 
-func ParseInt(value string) {
+func ParseInt(value string) int64 {
   result, err := strconv.ParseInt(value, 10, 64)
   if err != nil {
     return result

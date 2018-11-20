@@ -6,17 +6,15 @@ import (
 	"log"
   "io/ioutil"
 	"net/http"
-  "strconv"
 
 	core "github.com/neetjn/go-cars/core"
   utils "github.com/neetjn/go-cars/utils"
-  zap "go.uber.org/zap"
+  // zap "go.uber.org/zap"
 )
 
-func main() {
+// TODO: add error utilities to construct error payload responses for easy consumption
 
-  var MIN_VIN_LENGTH int = utils.ParseInt(utils.GetEnv("MIN_VIN_LENGTH", "15"))
-  var MAX_VIN_LENGTH int = utils.ParseInt(utils.GetEnv("MAX_VIN_LENGTH", "17"))
+func main() {
 
 	data, _ := ioutil.ReadFile("data/cars.json")
 	var cars *core.CarCollectionDto = &core.CarCollectionDto{}
@@ -38,12 +36,22 @@ func main() {
   })
 
   core.AddResource("/car/", "car", "", func(w http.ResponseWriter, r *http.Request) {
-    // TODO: implement processor for url parameters
-    // in the meantime using query args is sufficient to exercise given functionality
     vin := r.URL.Query().Get("vin")
-    if len(vin) != 5
+    if !utils.ValidateVin(vin) {
+      http.Error(w, "Invalid Vin Provided", http.StatusInternalServerError)
+      return
+    }
     switch r.Method {
-
+    case http.MethodGet:
+      for _, car := range cars.Items {
+        if car.Vin == vin {
+          resp, _ := json.Marshal(car)
+          w.Header().Set("Content-Type", "application/json")
+          fmt.Fprintf(w, string(resp))
+          return
+        }
+      }
+      http.Error(w, "Car Does Not Exist", http.StatusInternalServerError)
     }
   })
 
@@ -98,6 +106,7 @@ func main() {
       })
       w.Header().Set("Content-Type", "application/json")
       fmt.Fprintf(w, string(resp))
+    }
   })
 
 	log.Fatal(http.ListenAndServe(":8080", nil))
